@@ -1,6 +1,6 @@
 cmake_minimum_required( VERSION 3.13 )
 
-project( uxplay )
+project( OpenAirX )
 
 message( STATUS "Project name: " ${PROJECT_NAME} )
 
@@ -51,7 +51,7 @@ if( UNIX AND NOT APPLE )
   # convert AirPlay colormap 1:3:7:1 to sRGB (1:1:7:1), needed on Linux and BSD
   add_definitions( -DFULL_RANGE_RGB_FIX )
 elseif( APPLE AND UXPLAY_MACOS_STANDALONE )
-  # Use only the GStreamer.framework embedded inside UxPlay.app.
+  # Use only the GStreamer.framework embedded inside OpenAirX.app.
   set( CMAKE_BUILD_WITH_INSTALL_RPATH TRUE )
   set( CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE )
   set( CMAKE_INSTALL_RPATH
@@ -92,6 +92,8 @@ if  ( GST_MACOS )
 endif()
 
 add_executable( uxplay uxplay.cpp )
+# Keep upstream CMake target names for downstream links.
+set_target_properties( uxplay PROPERTIES OUTPUT_NAME OpenAirX )
 target_link_libraries( uxplay renderers airplay )
 if (DBUS_FOUND)
       target_link_libraries( uxplay ${DBUS_LIBRARY})

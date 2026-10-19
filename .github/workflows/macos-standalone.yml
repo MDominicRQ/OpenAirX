@@ -88,7 +88,7 @@ jobs:
           make install
           test -f "$RUNNER_TEMP/deps/lib/libplist-2.0.a"
 
-      - name: Compile UxPlay with old macOS deployment target
+      - name: Compile OpenAirX with old macOS deployment target
         shell: bash
         run: |
           set -euo pipefail
@@ -100,21 +100,21 @@ jobs:
             -DNO_MARCH_NATIVE=ON -DNO_X11_DEPS=ON \
             -DUXPLAY_MACOS_STANDALONE=ON
           cmake --build build --parallel 3
-          file build/uxplay
+          file build/openairx
 
       - name: Assemble DMG/PKG and audit binary dependencies
         shell: bash
         run: |
-          bash scripts/macos/package-app.sh build/uxplay \
+          bash scripts/macos/package-app.sh build/openairx \
             "${{ matrix.arch }}" "${{ matrix.minimum }}"
 
       - name: Smoke-test bundled CLI and GStreamer plugins
         shell: bash
         run: |
           set -euo pipefail
-          app="$PWD/dist/UxPlay.app"
-          "$app/Contents/MacOS/UxPlay" -h > "$RUNNER_TEMP/uxplay-help.txt" 2>&1
-          grep -i 'UxPlay' "$RUNNER_TEMP/uxplay-help.txt"
+          app="$PWD/dist/OpenAirX.app"
+          "$app/Contents/MacOS/OpenAirX" -h > "$RUNNER_TEMP/openairx-help.txt" 2>&1
+          grep -i 'OpenAirX' "$RUNNER_TEMP/openairx-help.txt"
           runtime="$app/Contents/Frameworks/GStreamer.framework/Versions/Current"
           export GST_PLUGIN_SYSTEM_PATH_1_0="$runtime/lib/gstreamer-1.0"
           export GST_PLUGIN_SCANNER="$runtime/libexec/gstreamer-1.0/gst-plugin-scanner"
@@ -132,21 +132,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mountpoint="$RUNNER_TEMP/uxplay-dmg-check"
+          mountpoint="$RUNNER_TEMP/openairx-dmg-check"
           mkdir -p "$mountpoint"
-          dmg="$PWD/dist/UxPlay-1.74.0-macos-${{ matrix.arch }}.dmg"
+          dmg="$PWD/dist/OpenAirX-1.74.0-macos-${{ matrix.arch }}.dmg"
           hdiutil attach -quiet -nobrowse -readonly -mountpoint "$mountpoint" "$dmg"
           trap 'hdiutil detach -quiet "$mountpoint" || true' EXIT
-          test -x "$mountpoint/UxPlay.app/Contents/MacOS/UxPlay"
+          test -x "$mountpoint/OpenAirX.app/Contents/MacOS/OpenAirX"
           test -L "$mountpoint/Applications"
           test "$(readlink "$mountpoint/Applications")" = "/Applications"
-          test -f "$mountpoint/UxPlay.app/Contents/Info.plist"
-          echo "DMG contains UxPlay.app and /Applications shortcut"
+          test -f "$mountpoint/OpenAirX.app/Contents/Info.plist"
+          test -s "$mountpoint/OpenAirX.app/Contents/Resources/OpenAirX.icns"
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleIconFile' "$mountpoint/OpenAirX.app/Contents/Info.plist" | grep -Fx OpenAirX.icns
+          echo "DMG contains OpenAirX.app and /Applications shortcut"
 
       - name: Upload installable files
         uses: actions/upload-artifact@v4
         with:
-          name: uxplay-macos-${{ matrix.arch }}
+          name: openairx-macos-${{ matrix.arch }}
           path: |
             dist/*.pkg
             dist/*.dmg
@@ -162,7 +164,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          pattern: uxplay-macos-*
+          pattern: openairx-macos-*
           path: release
           merge-multiple: true
       - uses: softprops/action-gh-release@v2
@@ -171,8 +173,8 @@ jobs:
             release/*.dmg
             release/*.pkg
             release/*.sha256
-          tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || format('v1.74.0-macos-ci.{0}', github.run_number) }}
-          name: ${{ github.ref == 'refs/heads/master' && format('UxPlay macOS 1.74.0 - CI build {0} (unsigned)', github.run_number) || github.ref_name }}
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || format('v1.74.0-openairx-ci.{0}', github.run_number) }}
+          name: ${{ github.ref == 'refs/heads/master' && format('OpenAirX macOS 1.74.0 - CI build {0} (unsigned)', github.run_number) || github.ref_name }}
           prerelease: ${{ github.ref == 'refs/heads/master' }}
           fail_on_unmatched_files: true
           body: |

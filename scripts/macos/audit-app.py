@@ -13,11 +13,15 @@ def cmd(*args):
 def audit(app, arch, minimum):
     contents = app / "Contents"
     framework = contents / "Frameworks/GStreamer.framework"
-    main = contents / "MacOS/uxplay-bin"
-    launcher = contents / "MacOS/UxPlay"
+    main = contents / "MacOS/openairx-bin"
+    launcher = contents / "MacOS/OpenAirX"
     assert framework.is_dir() and main.is_file() and launcher.is_file()
     with (contents / "Info.plist").open("rb") as source:
-        assert plistlib.load(source)["LSMinimumSystemVersion"] == minimum
+        info = plistlib.load(source)
+        assert info["LSMinimumSystemVersion"] == minimum
+        assert info["CFBundleExecutable"] == "OpenAirX"
+        assert info["CFBundleIconFile"] == "OpenAirX.icns"
+    assert (contents / "Resources/OpenAirX.icns").stat().st_size > 1024
     for file in (main, launcher):
         supported = cmd("lipo", "-archs", str(file)).split()
         assert arch in supported, (file, supported)

@@ -2,7 +2,7 @@
  * RPiPlay - An open-source AirPlay mirroring server for Raspberry Pi
  * Copyright (C) 2019 Florian Draschbacher
  * Modified extensively to become 
- * UxPlay - An open-souce AirPlay mirroring server.
+ * OpenAirX - An open-souce AirPlay mirroring server.
  * Modifications Copyright (C) 2021-23 F. Duncanh
  *
  * This program is free software; you can redistribute it and/or modify
@@ -79,7 +79,7 @@
 
 #define SECOND_IN_USECS 1000000
 #define SECOND_IN_NSECS 1000000000UL
-#define DEFAULT_NAME "UxPlay"
+#define DEFAULT_NAME "OpenAirX"
 #define DEFAULT_DEBUG_LOG false
 #define LOWEST_ALLOWED_PORT 1024
 #define HIGHEST_PORT 65535
@@ -706,7 +706,7 @@ static gboolean video_eos_watch_callback (gpointer loop) {
     return TRUE;
 }
 
-#ifdef EXTERNAL_DNS_SD   /* only used when UxPlay is  compiled to use Bonjour/Avahi DNS_SD */  
+#ifdef EXTERNAL_DNS_SD   /* only used when OpenAirX is  compiled to use Bonjour/Avahi DNS_SD */  
 /* Service a DNS-SD registration's socket (see dnssd_get_service_fd in dnssd.h).
    Without this, Avahi's compat library never reads its D-Bus connection and the
    system dbus-daemon queues every bus signal addressed to it, without bound. */
@@ -1015,7 +1015,7 @@ static std::string random_mac () {
 }
 
 static void print_info (char *name) {
-    printf("UxPlay %s: An open-source AirPlay mirroring server.\n", VERSION);
+    printf("OpenAirX %s: An open-source AirPlay mirroring server.\n", VERSION);
     printf("=========== Website: https://github.com/FDH2/UxPlay ==========\n");
     printf("Usage: %s [-n name] [-s wxh] [-p [n]] [(other options)]\n", name);
     printf("Options:\n");
@@ -1036,7 +1036,7 @@ static void print_info (char *name) {
     printf("-pin[xxxx]Use a 4-digit pin code to control client access (default: no)\n");
     printf("          default pin is random: optionally use fixed pin xxxx\n");
     printf("-p2p      Advertise and accept AirPlay over Apple peer-to-peer (macOS only)\n");
-    printf("          uses a one-time pin; makes UxPlay visible to nearby Apple devices\n");
+    printf("          uses a one-time pin; makes OpenAirX visible to nearby Apple devices\n");
     printf("-reg [fn] Keep a register in $HOME/.uxplay.register to verify returning\n");
     printf("          client pin-registration; (option: use file \"fn\" for this)\n");
     printf("-pw [pwd] Require use of password to control client access;\n");
@@ -1097,7 +1097,7 @@ static void print_info (char *name) {
     printf("-nc no    Cancel the -nc option (DO close video window) \n");
     printf("-nohold   Drop current connection when new client connects.\n");
     printf("-restrict Restrict clients to those specified by \"-allow <deviceID>\"\n");
-    printf("          UxPlay displays deviceID when a client attempts to connect\n");
+    printf("          OpenAirX displays deviceID when a client attempts to connect\n");
     printf("          Use \"-restrict no\" for no client restrictions (default)\n");
     printf("-allow <i>Permit deviceID = <i> to connect if restrictions are imposed\n");
     printf("-block <i>Always block connections from deviceID = <i>\n");
@@ -1105,7 +1105,7 @@ static void print_info (char *name) {
     printf("-fps n    Set maximum allowed streaming framerate, default 30\n");
     printf("-f {H|V|I}Horizontal|Vertical flip, or both=Inversion=rotate 180 deg\n");
     printf("-r {R|L}  Rotate 90 degrees Right (cw) or Left (ccw)\n");
-    printf("-m [mac]  Set MAC address (also Device ID);use for concurrent UxPlays\n");
+    printf("-m [mac]  Set MAC address (also Device ID);use for concurrent OpenAirXs\n");
     printf("          if mac xx:xx:xx:xx:xx:xx is not given, a random MAC is used\n");
     printf("-key [fn] Store private key in $HOME/.uxplay.pem (or in file \"fn\")\n");
     printf("-dacp [fn]Export client DACP information to file $HOME/.uxplay.dacp\n");
@@ -1746,7 +1746,7 @@ static void parse_arguments (int argc, char *argv[]) {
             print_info(argv[0]);
             exit(0);
         } else if (arg == "-v") {
-            printf("UxPlay version %s; for help, use option \"-h\"\n", VERSION);
+            printf("OpenAirX version %s; for help, use option \"-h\"\n", VERSION);
             exit(0);
         } else if (arg == "-vp") {
             if (!option_has_value(i, argc, arg, argv[i+1])) exit(1);
@@ -1995,7 +1995,7 @@ static void parse_arguments (int argc, char *argv[]) {
 		exit(1);
 	    }
 #else
-	    fprintf(stderr, "invalid: the \"-p2p\" option is only available on macOS hosts with UxPlay compiled to use Bonjour services\n");      
+	    fprintf(stderr, "invalid: the \"-p2p\" option is only available on macOS hosts with OpenAirX compiled to use Bonjour services\n");      
             exit(1);
 #endif
 	    
@@ -2370,7 +2370,7 @@ static int start_dnssd(std::vector<char> hw_addr, std::string name) {
         return 2;
     }
     /* pin_pw controls client access
-       pin_pw = 1: client must enter pin displayed onscreen (first access only, remembered by client, coupled to UxPlay's deviceID)
+       pin_pw = 1: client must enter pin displayed onscreen (first access only, remembered by client, coupled to OpenAirX's deviceID)
               = 2: client must enter password (same password for all clients)
               = 3: client must enter randomly selected 4-digit password displayed like an on-screen pin (every access)
               = 0: no access control
@@ -3187,7 +3187,7 @@ static void read_config_file(const char * filename, const char * uxplay_name) {
     options.push_back(uxplay_name);
     std::ifstream file(config_file);
     if (file.is_open()) {
-        fprintf(stdout,"UxPlay: reading configuration from  %s\n", config_file.c_str());
+        fprintf(stdout,"OpenAirX: reading configuration from  %s\n", config_file.c_str());
         std::string line;
         while (std::getline(file, line)) {
             if (line[0] == '#') continue;
@@ -3246,7 +3246,7 @@ static void read_config_file(const char * filename, const char * uxplay_name) {
 	}
         file.close();
     } else {
-        fprintf(stderr,"UxPlay: failed to open configuration file at %s\n", config_file.c_str());
+        fprintf(stderr,"OpenAirX: failed to open configuration file at %s\n", config_file.c_str());
     }
     if (options.size() > 1) {
 
@@ -3389,7 +3389,7 @@ int main (int argc, char *argv[]) {
     }
 #endif
 
-    LOGI("UxPlay %s: An Open-Source AirPlay mirroring and audio-streaming server.", VERSION);
+    LOGI("OpenAirX %s: An Open-Source AirPlay mirroring and audio-streaming server.", VERSION);
 
 #ifdef DBUS
     if (scrsv && !use_video) {
@@ -3463,7 +3463,7 @@ int main (int argc, char *argv[]) {
 #if __APPLE__
     /* warn about default  use of -nc option on macOS */
     if (!new_window_closing_behavior) {
-        LOGI("UxPlay on macOS is using -nc option as workaround for GStreamer problem: use \"-nc no\" to omit workaround");
+        LOGI("OpenAirX on macOS is using -nc option as workaround for GStreamer problem: use \"-nc no\" to omit workaround");
     }
 #endif
 

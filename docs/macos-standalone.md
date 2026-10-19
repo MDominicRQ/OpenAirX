@@ -1,4 +1,4 @@
-# Standalone UxPlay installers for macOS
+# Standalone OpenAirX installers for macOS
 
 Once a successful GitHub Actions build finishes, download its installer
 artifact from the **Standalone macOS installers** workflow. Version-tagged
@@ -9,14 +9,14 @@ releases publish the actual .pkg and .dmg files to **Releases**.
 - Intel x86_64: macOS 10.15 Catalina and later.
 - Apple Silicon arm64: macOS 11 Big Sur and later (Catalina cannot run on ARM Macs).
 
-Install the .pkg to place UxPlay.app into /Applications, or open the .dmg
-and drag UxPlay.app to Applications. These builds bundle GStreamer and
+Install the .pkg to place OpenAirX.app into /Applications, or open the .dmg
+and drag OpenAirX.app to Applications. These builds bundle GStreamer and
 link OpenSSL/libplist statically, so the recipient does not need Homebrew,
 GStreamer, Xcode, or a compiler.
 
-Open **UxPlay** in Applications, keep your Mac and the sending iPhone,
+Open **OpenAirX** in Applications, keep your Mac and the sending iPhone,
 iPad or Mac on the same Bonjour/mDNS-capable network, then choose the
-UxPlay receiver in Screen Mirroring. Grant macOS local-network permission
+OpenAirX receiver in Screen Mirroring. Grant macOS local-network permission
 and incoming connection/firewall permission when asked.
 
 **Gatekeeper:** The public GitHub Actions build uses an **ad-hoc
@@ -28,12 +28,12 @@ Apple notarization, which are not possible without the owner's credentials.
 
 For help, troubleshooting output and PIN mode use Terminal:
 
-    /Applications/UxPlay.app/Contents/MacOS/UxPlay -h
-    /Applications/UxPlay.app/Contents/MacOS/UxPlay -pin
+    /Applications/OpenAirX.app/Contents/MacOS/OpenAirX -h
+    /Applications/OpenAirX.app/Contents/MacOS/OpenAirX -pin
 
 The app wrapper defaults to -vsync no (recommended for macOS), with
 user CLI flags passed after it. To configure options used on each launch,
-see upstream ~/.uxplayrc documentation.
+see upstream ~/.openairxrc documentation.
 
 ## Build and test guarantees
 
@@ -51,10 +51,10 @@ on real Catalina hardware. These need an end-to-end device test.
 ## Release
 
 After merging and checking the CI results, push a tag like
-v1.74.0-macos.1. The workflow publishes both architectures' .pkg
+v1.74.0-openairx.1. The workflow publishes both architectures' .pkg
 and .dmg installers in GitHub Releases. Each DMG is mounted by CI
-and verified to contain UxPlay.app and an Applications shortcut.
+and verified to contain OpenAirX.app and an Applications shortcut.
 
-UxPlay is GPL-3.0; see LICENSE and upstream source. Bundled GStreamer
+OpenAirX is GPL-3.0; see LICENSE and upstream source. Bundled GStreamer
 components have additional open-source licenses; review these when
 redistributing binaries.

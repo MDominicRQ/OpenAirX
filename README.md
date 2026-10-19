@@ -1,9 +1,10 @@
-# UxPlay 1.74 (Experimental): AirPlay-Mirror and AirPlay-Audio server for Linux, macOS, and Unix (also runs on Windows).
+# OpenAirX 1.74 — AirPlay mirroring and audio receiver (based on UxPlay)
 
-> **Standalone macOS installers (this fork):** precompiled .pkg and .dmg for
+> **OpenAirX standalone macOS installers:** precompiled .pkg and .dmg for
 > **Intel 10.15+** and **Apple Silicon 11+** are available in
-> [Releases](https://github.com/MDominicRQ/UxPlay/releases).
-> They include the GStreamer runtime and do not need Homebrew on the Mac.
+> [Releases](https://github.com/MDominicRQ/OpenAirX/releases).
+> They include the GStreamer runtime, your OpenAirX logo, and do not need Homebrew on the Mac.
+> Original UxPlay development and license acknowledgements remain below.
 > **Not notarized**: macOS may require *Open Anyway* on first launch.
 > [Install details and CI guarantees](docs/macos-standalone.md).
 

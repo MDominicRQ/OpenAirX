@@ -1,5 +1,5 @@
 /*
- * Finder-compatible executable for self-contained UxPlay.app (GPL-3.0).
+ * Finder-compatible executable for self-contained OpenAirX.app (GPL-3.0).
  */
 #define _DARWIN_C_SOURCE 1
 #include <mach-o/dyld.h>
@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
     char path[PATH_MAX];
     uint32_t cap = sizeof(path);
     if (_NSGetExecutablePath(path, &cap) != 0) {
-        fputs("UxPlay: executable path too long\n", stderr);
+        fputs("OpenAirX: executable path too long\n", stderr);
         return 1;
     }
     char *slash = strrchr(path, '/');
@@ -30,12 +30,12 @@ int main(int argc, char **argv) {
     *slash = 0;
     char fw[PATH_MAX], binary[PATH_MAX];
     if (join(fw, sizeof(fw), path, "../Frameworks/GStreamer.framework") ||
-        join(binary, sizeof(binary), path, "uxplay-bin")) return 1;
+        join(binary, sizeof(binary), path, "openairx-bin")) return 1;
     if (bundle_env(fw, "GST_PLUGIN_SYSTEM_PATH_1_0", "Versions/Current/lib/gstreamer-1.0") ||
         bundle_env(fw, "GST_PLUGIN_SCANNER", "Versions/Current/libexec/gstreamer-1.0/gst-plugin-scanner") ||
         bundle_env(fw, "GIO_EXTRA_MODULES", "Versions/Current/lib/gio/modules") ||
         bundle_env(fw, "GSETTINGS_SCHEMA_DIR", "Versions/Current/share/glib-2.0/schemas")) {
-        perror("UxPlay: setenv");
+        perror("OpenAirX: setenv");
         return 1;
     }
     if (setenv("GST_PLUGIN_PATH_1_0", "", 1)) return 1;
@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
     for (int i = 1; i < argc; ++i) args[i + 2] = argv[i];
     args[argc + 2] = NULL;
     execv(binary, args);
-    perror("UxPlay: cannot execute uxplay-bin");
+    perror("OpenAirX: cannot execute openairx-bin");
     free(args);
     return 1;
 }

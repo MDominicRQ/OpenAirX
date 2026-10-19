@@ -49,8 +49,8 @@ jobs:
 
       - name: Verify binary
         run: |
-          test -x build/uxplay
-          ls -la build/uxplay
+          test -x build/OpenAirX
+          ls -la build/OpenAirX
 
   build-macos:
     runs-on: macos-latest
@@ -88,8 +88,8 @@ jobs:
 
       - name: Verify binary
         run: |
-          test -x build/uxplay
-          ls -la build/uxplay
+          test -x build/OpenAirX
+          ls -la build/OpenAirX
 
   build-windows-intel:
     runs-on: windows-latest
@@ -137,8 +137,8 @@ jobs:
 
       - name: Verify binary
         run: |
-          test -f build/uxplay.exe
-          ls -la build/uxplay.exe
+          test -f build/OpenAirX.exe
+          ls -la build/OpenAirX.exe
 
 
   build-windows-arm64:
@@ -184,6 +184,6 @@ jobs:
 
       - name: Verify binary
         run: |
-          test -f build/uxplay.exe
-          ls -la build/uxplay.exe
+          test -f build/OpenAirX.exe
+          ls -la build/OpenAirX.exe
 
