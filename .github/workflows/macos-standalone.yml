@@ -192,6 +192,9 @@ jobs:
             release/*.tar.gz
           tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || format('v1.74.0-openairx-ci.{0}', github.run_number) }}
           name: ${{ github.ref == 'refs/heads/master' && format('OpenAirX macOS 1.74.0 - CI build {0} (unsigned)', github.run_number) || github.ref_name }}
+          # Ensure the Release tag points to the exact revision used to build
+          # the packages and the shipped OpenAirX-source-<sha>.tar.gz.
+          target_commitish: ${{ github.sha }}
           prerelease: ${{ github.ref == 'refs/heads/master' }}
           fail_on_unmatched_files: true
           body: |
