@@ -50,6 +50,12 @@ endif()
 if( UNIX AND NOT APPLE )
   # convert AirPlay colormap 1:3:7:1 to sRGB (1:1:7:1), needed on Linux and BSD
   add_definitions( -DFULL_RANGE_RGB_FIX )
+elseif( APPLE AND UXPLAY_MACOS_STANDALONE )
+  # Use only the GStreamer.framework embedded inside UxPlay.app.
+  set( CMAKE_BUILD_WITH_INSTALL_RPATH TRUE )
+  set( CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE )
+  set( CMAKE_INSTALL_RPATH
+       "@executable_path/../Frameworks/GStreamer.framework/Versions/Current/lib" )
 else()
   set( CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE )
 endif()
