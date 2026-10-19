@@ -38,7 +38,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install build tools
-        run: brew install cmake pkg-config autoconf automake libtool
+        run: brew install cmake pkg-config autoconf automake libtool librsvg
 
       - name: Install official GStreamer universal runtime and SDK
         shell: bash
@@ -100,12 +100,12 @@ jobs:
             -DNO_MARCH_NATIVE=ON -DNO_X11_DEPS=ON \
             -DUXPLAY_MACOS_STANDALONE=ON
           cmake --build build --parallel 3
-          file build/openairx
+          file build/OpenAirX
 
       - name: Assemble DMG/PKG and audit binary dependencies
         shell: bash
         run: |
-          bash scripts/macos/package-app.sh build/openairx \
+          bash scripts/macos/package-app.sh build/OpenAirX \
             "${{ matrix.arch }}" "${{ matrix.minimum }}"
 
       - name: Smoke-test bundled CLI and GStreamer plugins

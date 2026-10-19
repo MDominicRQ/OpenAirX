@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1254 1254">
+<defs>
+  <radialGradient id="bg" cx="49%" cy="47%" r="77%"><stop stop-color="#1b2133"/><stop offset="1" stop-color="#0d1423"/></radialGradient>
+  <linearGradient id="base" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#00b7ff"/><stop offset="0.24" stop-color="#03c4f1"/><stop offset="0.48" stop-color="#00e6dc"/><stop offset="0.78" stop-color="#50f5c5"/><stop offset="1" stop-color="#83f2ae"/></linearGradient>
+  <radialGradient id="purple" cx="88%" cy="13%" r="60%"><stop stop-color="#aa5afe" stop-opacity="1"/><stop offset="0.37" stop-color="#8f83fe" stop-opacity=".85"/><stop offset="1" stop-color="#8f83fe" stop-opacity="0"/></radialGradient>
+  <radialGradient id="blue" cx="14%" cy="88%" r="70%"><stop stop-color="#008cff" stop-opacity=".98"/><stop offset="0.40" stop-color="#00aaff" stop-opacity=".70"/><stop offset="1" stop-color="#00aaff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="aqua" cx="48%" cy="23%" r="48%"><stop stop-color="#00f9d7" stop-opacity=".9"/><stop offset="1" stop-color="#00f9d7" stop-opacity="0"/></radialGradient>
+  <clipPath id="mark">
+    <path d="M743 1077 L644 936 L636 930 L629 929 L621 932 L513 1069 L508 1082 L511 1090 L522 1097 L730 1097 L742 1088 Z"/>
+    <path d="M497 838 L440 838 L340 966 L395 967 Z"/>
+    <path d="M697 670 L668 706 L858 967 L914 967 L807 817 Z"/>
+    <path d="M1102 1061 L793 630 L882 515 L824 514 L734 630 L1009 1015 L830 1015 L633 749 L423 1015 L241 1015 L416 789 L356 789 L142 1062 L446 1062 L631 825 L806 1062 Z"/>
+    <path d="M834 411 L777 411 L473 797 L529 797 Z"/>
+    <path d="M927 292 L872 291 L810 370 L867 370 Z"/>
+    <path d="M149 622 L165 644 L185 653 L460 653 L459 658 L427 698 L345 698 L331 703 L312 722 L306 745 L449 747 L569 596 L195 596 L195 243 L427 243 L631 515 L843 243 L1031 243 L1032 245 L856 472 L914 473 L1129 195 L819 195 L631 437 L452 195 L187 195 L176 198 L163 206 L154 216 L146 241 L146 608 Z"/></clipPath>
+</defs>
+<rect width="1254" height="1254" fill="url(#bg)"/>
+<g clip-path="url(#mark)">
+ <rect width="1254" height="1254" fill="url(#base)"/>
+ <rect width="1254" height="1254" fill="url(#blue)"/>
+ <rect width="1254" height="1254" fill="url(#purple)"/>
+ <rect width="1254" height="1254" fill="url(#aqua)"/>
+</g>
+</svg>

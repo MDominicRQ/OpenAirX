@@ -1,5 +1,9 @@
 # Standalone OpenAirX installers for macOS
 
+The OpenAirX icon is generated at build time from `assets/OpenAirX-logo.svg`,
+a resolution-independent vector adaptation of the provided emblem. The
+macOS packaging script rasterizes it and bundles `OpenAirX.icns`.
+
 Once a successful GitHub Actions build finishes, download its installer
 artifact from the **Standalone macOS installers** workflow. Version-tagged
 releases publish the actual .pkg and .dmg files to **Releases**.

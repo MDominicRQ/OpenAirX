@@ -27,7 +27,12 @@ clang -std=c11 -Wall -Wextra -Werror -O2 \
   -o "$app/Contents/MacOS/OpenAirX"
 
 # Generate a complete macOS .icns from the bundled logo.
-logo="$PWD/assets/openairx-logo.jpg"
+logo="$PWD/assets/OpenAirX-logo.svg"
+test -s "$logo"
+base_png="$out/OpenAirX-icon-source.png"
+rsvg-convert --width 1024 --height 1024 "$logo" > "$base_png"
+test -s "$base_png"
+logo="$base_png"
 iconset="$out/OpenAirX.iconset"
 rm -rf "$iconset"
 mkdir -p "$iconset"
@@ -39,6 +44,7 @@ for spec in "16:icon_16x16.png" "32:icon_16x16@2x.png" "32:icon_32x32.png" "64:i
 done
 iconutil -c icns -o "$app/Contents/Resources/OpenAirX.icns" "$iconset"
 rm -rf "$iconset"
+rm -f "$base_png"
 test -s "$app/Contents/Resources/OpenAirX.icns"
 
 cp LICENSE "$app/Contents/Resources/LICENSE-OpenAirX.txt"
