@@ -52,7 +52,8 @@ on real Catalina hardware. These need an end-to-end device test.
 
 After merging and checking the CI results, push a tag like
 v1.74.0-macos.1. The workflow publishes both architectures' .pkg
-and .dmg installers in GitHub Releases.
+and .dmg installers in GitHub Releases. Each DMG is mounted by CI
+and verified to contain UxPlay.app and an Applications shortcut.
 
 UxPlay is GPL-3.0; see LICENSE and upstream source. Bundled GStreamer
 components have additional open-source licenses; review these when

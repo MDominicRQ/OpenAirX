@@ -63,7 +63,15 @@ ditto "$app" "$root/UxPlay.app"
 pkgbuild --root "$root" --install-location "/Applications" \
   --identifier "com.mdominicrq.uxplay" --version "$version" "$out/$name.pkg"
 rm -rf "$root"
-hdiutil create -quiet -volname UxPlay -srcfolder "$app" \
+# A conventional drag-to-Applications disk image; do not use the .app
+# as -srcfolder, as that can expose only its Contents directory.
+dmg_root="$out/dmg-root"
+rm -rf "$dmg_root"
+mkdir -p "$dmg_root"
+ditto "$app" "$dmg_root/UxPlay.app"
+ln -s /Applications "$dmg_root/Applications"
+hdiutil create -quiet -volname UxPlay -srcfolder "$dmg_root" \
   -ov -format UDZO "$out/$name.dmg"
+rm -rf "$dmg_root"
 (cd "$out" && shasum -a 256 "$name.pkg" "$name.dmg" > "$name.sha256")
 ls -lh "$out/$name.pkg" "$out/$name.dmg"
