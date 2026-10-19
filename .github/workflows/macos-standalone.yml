@@ -146,6 +146,11 @@ jobs:
           mkdir -p "$RUNNER_TEMP/openairx-verified.iconset"
           iconutil --convert iconset --output "$RUNNER_TEMP/openairx-verified.iconset" "$iconfile"
           test -s "$RUNNER_TEMP/openairx-verified.iconset/icon_512x512@2x.png"
+          sips -g hasAlpha "$RUNNER_TEMP/openairx-verified.iconset/icon_512x512@2x.png" | grep -F "hasAlpha: yes"
+          test -s "$mountpoint/OpenAirX.app/Contents/Resources/LEGAL.md"
+          test -s "$mountpoint/OpenAirX.app/Contents/Resources/THIRD_PARTY_NOTICES.md"
+          test -s "$mountpoint/OpenAirX.app/Contents/Resources/Licenses/OpenSSL-Apache-2.0.txt"
+          test -s "$mountpoint/OpenAirX.app/Contents/Resources/Licenses/GStreamer-LGPL-2.1.txt"
           /usr/libexec/PlistBuddy -c 'Print :CFBundleIconFile' "$mountpoint/OpenAirX.app/Contents/Info.plist" | grep -Fx OpenAirX.icns
           echo "DMG contains OpenAirX.app and /Applications shortcut"
 
@@ -166,17 +171,25 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           pattern: openairx-macos-*
           path: release
           merge-multiple: true
+      - name: Export exact OpenAirX source snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          git archive --format=tar.gz --output="release/OpenAirX-source-${GITHUB_SHA:0:12}.tar.gz" "$GITHUB_SHA"
+          (cd release && sha256sum OpenAirX-source-*.tar.gz > OpenAirX-source.sha256)
       - uses: softprops/action-gh-release@v2
         with:
           files: |
             release/*.dmg
             release/*.pkg
             release/*.sha256
+            release/*.tar.gz
           tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || format('v1.74.0-openairx-ci.{0}', github.run_number) }}
           name: ${{ github.ref == 'refs/heads/master' && format('OpenAirX macOS 1.74.0 - CI build {0} (unsigned)', github.run_number) || github.ref_name }}
           prerelease: ${{ github.ref == 'refs/heads/master' }}
@@ -185,5 +198,8 @@ jobs:
             Self-contained Intel (macOS 10.15+) and Apple Silicon (macOS 11+) installers.
             No Homebrew, GStreamer, or developer tools are needed on the receiving Mac.
             These builds are not Apple-notarized; Gatekeeper may require Open Anyway.
+            Corresponding OpenAirX source snapshot, license notices and build scripts are included.
+            Based on UxPlay under GPL-3.0-or-later. See LEGAL.md and THIRD_PARTY_NOTICES.md.
+            Bundled GStreamer plugins have additional per-component obligations; redistribution requires review.
             See docs/macos-standalone.md for installation and test limitations.
           generate_release_notes: true

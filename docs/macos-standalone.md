@@ -1,7 +1,7 @@
 # Standalone OpenAirX installers for macOS
 
-The OpenAirX icon is generated at build time from `assets/OpenAirX-logo.svg`,
-a resolution-independent vector adaptation of the provided emblem. The
+The OpenAirX icon is generated at build time from `assets/OpenAirX-macos.svg`,
+a macOS rounded, transparent-corner adaptation of the OpenAirX emblem. The
 macOS packaging script rasterizes it and bundles `OpenAirX.icns`.
 
 Once a successful GitHub Actions build finishes, download its installer
@@ -37,7 +37,7 @@ For help, troubleshooting output and PIN mode use Terminal:
 
 The app wrapper defaults to -vsync no (recommended for macOS), with
 user CLI flags passed after it. To configure options used on each launch,
-see upstream ~/.openairxrc documentation.
+see the inherited UxPlay config file formats (`~/.uxplayrc`, `~/.config/uxplayrc`, or `UXPLAYRC`).
 
 ## Build and test guarantees
 
@@ -59,6 +59,6 @@ v1.74.0-openairx.1. The workflow publishes both architectures' .pkg
 and .dmg installers in GitHub Releases. Each DMG is mounted by CI
 and verified to contain OpenAirX.app and an Applications shortcut.
 
-OpenAirX is GPL-3.0; see LICENSE and upstream source. Bundled GStreamer
+OpenAirX derives from UxPlay under GPL-3.0-or-later; see LICENSE, LEGAL.md and THIRD_PARTY_NOTICES.md. Bundled GStreamer
 components have additional open-source licenses; review these when
 redistributing binaries.

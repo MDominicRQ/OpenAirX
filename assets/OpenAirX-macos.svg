@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1254 1254">
+<defs>
+ <linearGradient id="surface" x1=".1" y1="0" x2=".88" y2="1"><stop offset="0" stop-color="#193459"/><stop offset=".24" stop-color="#0e1d38"/><stop offset=".58" stop-color="#070e23"/><stop offset="1" stop-color="#132954"/></linearGradient>
+ <radialGradient id="light" cx=".12" cy=".02" r="1.02"><stop offset="0" stop-color="#3372b9" stop-opacity=".7"/><stop offset=".3" stop-color="#165a8c" stop-opacity=".22"/><stop offset="1" stop-color="#06142d" stop-opacity="0"/></radialGradient>
+ <radialGradient id="violet" cx="1" cy="0" r=".64"><stop offset="0" stop-color="#8880ff" stop-opacity=".7"/><stop offset=".48" stop-color="#4e48a7" stop-opacity=".26"/><stop offset="1" stop-color="#3648a7" stop-opacity="0"/></radialGradient>
+ <linearGradient id="rim" x1=".03" y1=".85" x2=".92" y2=".04"><stop offset="0" stop-color="#047cff"/><stop offset=".27" stop-color="#16acff"/><stop offset=".61" stop-color="#5b87ff"/><stop offset="1" stop-color="#a79aff"/></linearGradient>
+ <linearGradient id="glyph" x1="0" y1=".68" x2="1" y2=".2"><stop offset="0" stop-color="#008cff"/><stop offset=".27" stop-color="#00c4fc"/><stop offset=".52" stop-color="#03eed6"/><stop offset=".76" stop-color="#83ffd2"/><stop offset="1" stop-color="#ac6eff"/></linearGradient>
+ <radialGradient id="glyph-blue" cx=".02" cy=".5" r="1"><stop offset="0" stop-color="#0f9cfb" stop-opacity=".55"/><stop offset="1" stop-color="#0f9cfb" stop-opacity="0"/></radialGradient>
+ <radialGradient id="glyph-purple" cx=".94" cy=".08" r=".6"><stop offset="0" stop-color="#a359ff" stop-opacity=".96"/><stop offset="1" stop-color="#a359ff" stop-opacity="0"/></radialGradient>
+ <filter id="shadow" x="-.3" y="-.3" width="1.6" height="1.7"><feGaussianBlur stdDeviation="10"/></filter>
+ <path id="tile" d="M271 86 C155 86 82 162 82 277 L82 949 C82 1073 159 1151 283 1151 H970 C1090 1151 1172 1068 1172 949 L1172 285 C1172 161 1091 86 974 86 Z"/>
+ <clipPath id="tile-mask"><use href="#tile"/></clipPath>
+ <path id="symbol" d="M743 1077 L644 936 L636 930 L629 929 L621 932 L513 1069 L508 1082 L511 1090 L522 1097 L730 1097 L742 1088 Z M497 838 L440 838 L340 966 L395 967 Z M697 670 L668 706 L858 967 L914 967 L807 817 Z M1102 1061 L793 630 L882 515 L824 514 L734 630 L1009 1015 L830 1015 L633 749 L423 1015 L241 1015 L416 789 L356 789 L142 1062 L446 1062 L631 825 L806 1062 Z M834 411 L777 411 L473 797 L529 797 Z M927 292 L872 291 L810 370 L867 370 Z M149 622 L165 644 L185 653 L460 653 L459 658 L427 698 L345 698 L331 703 L312 722 L306 745 L449 747 L569 596 L195 596 L195 243 L427 243 L631 515 L843 243 L1031 243 L1032 245 L856 472 L914 473 L1129 195 L819 195 L631 437 L452 195 L187 195 L176 198 L163 206 L154 216 L146 241 L146 608 Z"/>
+</defs>
+<g clip-path="url(#tile-mask)">
+ <rect x="80" y="84" width="1095" height="1069" fill="url(#surface)"/>
+ <rect x="80" y="84" width="1095" height="1069" fill="url(#light)"/>
+ <rect x="80" y="84" width="1095" height="1069" fill="url(#violet)"/>
+ <path d="M120 310 Q135 120 324 111 L971 111 Q1110 128 1140 288" stroke="#ffffff" stroke-opacity=".17" stroke-width="5" fill="none"/>
+</g>
+<use href="#tile" fill="none" stroke="url(#rim)" stroke-width="7" opacity=".94"/>
+<path d="M270 103 C166 103 99 175 99 277 V949 C99 1060 169 1133 283 1133 H970 C1079 1133 1154 1056 1154 949 V285 C1154 174 1080 103 974 103 Z" fill="none" stroke="#719eff" stroke-width="8" opacity=".22"/>
+<g transform="translate(80 71) scale(.86)">
+ <use href="#symbol" fill="#03132a" opacity=".8" transform="translate(0 8)" filter="url(#shadow)"/>
+ <use href="#symbol" fill="url(#glyph)"/>
+ <use href="#symbol" fill="url(#glyph-blue)"/>
+ <use href="#symbol" fill="url(#glyph-purple)"/>
+</g>
+</svg>

@@ -27,7 +27,7 @@ clang -std=c11 -Wall -Wextra -Werror -O2 \
   -o "$app/Contents/MacOS/OpenAirX"
 
 # Generate a complete macOS .icns from the bundled logo.
-logo="$PWD/assets/OpenAirX-logo.svg"
+logo="$PWD/assets/OpenAirX-macos.svg"
 test -s "$logo"
 base_png="$out/OpenAirX-icon-source.png"
 rsvg-convert --width 1024 --height 1024 "$logo" > "$base_png"
@@ -49,6 +49,11 @@ test -s "$app/Contents/Resources/OpenAirX.icns"
 
 cp LICENSE "$app/Contents/Resources/LICENSE-OpenAirX.txt"
 cp docs/macos-standalone.md "$app/Contents/Resources/README-macOS.md"
+cp LEGAL.md THIRD_PARTY_NOTICES.md "$app/Contents/Resources/"
+mkdir -p "$app/Contents/Resources/Licenses"
+cp legal/licenses/*.txt "$app/Contents/Resources/Licenses/"
+cp lib/llhttp/LICENSE-MIT "$app/Contents/Resources/Licenses/llhttp-MIT.txt"
+# Users can inspect component notices and replace LGPL shared libraries as permitted.
 APP_PLIST="$app/Contents/Info.plist" APP_VERSION="$version" APP_MIN_OS="$minimum" \
   python3 - <<'PY'
 import os, plistlib

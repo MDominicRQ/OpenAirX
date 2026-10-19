@@ -1,9 +1,13 @@
 /**
  * RPiPlay - An open-source AirPlay mirroring server for Raspberry Pi
  * Copyright (C) 2019 Florian Draschbacher
- * Modified extensively to become 
- * OpenAirX - An open-souce AirPlay mirroring server.
+ * Modified extensively to become UxPlay - an open-source
+ * AirPlay mirroring server.
  * Modifications Copyright (C) 2021-23 F. Duncanh
+ *
+ * This derivative project is branded OpenAirX. Changes to naming, packaging,
+ * macOS distribution and documentation were made in 2026 in this repository.
+ * Original RPiPlay and UxPlay author attributions are retained.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1016,7 +1020,7 @@ static std::string random_mac () {
 
 static void print_info (char *name) {
     printf("OpenAirX %s: An open-source AirPlay mirroring server.\n", VERSION);
-    printf("=========== Website: https://github.com/FDH2/UxPlay ==========\n");
+    printf("=========== OpenAirX: https://github.com/MDominicRQ/OpenAirX ==========\n\u0020\u0020\u0020\u0020Based on UxPlay: https://github.com/FDH2/UxPlay\n");
     printf("Usage: %s [-n name] [-s wxh] [-p [n]] [(other options)]\n", name);
     printf("Options:\n");
     printf("-n name   Specify network name of the AirPlay server (UTF-8/ascii)\n");
