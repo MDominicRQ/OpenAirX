@@ -141,7 +141,11 @@ jobs:
           test -L "$mountpoint/Applications"
           test "$(readlink "$mountpoint/Applications")" = "/Applications"
           test -f "$mountpoint/OpenAirX.app/Contents/Info.plist"
-          test -s "$mountpoint/OpenAirX.app/Contents/Resources/OpenAirX.icns"
+          iconfile="$mountpoint/OpenAirX.app/Contents/Resources/OpenAirX.icns"
+          test -s "$iconfile"
+          mkdir -p "$RUNNER_TEMP/openairx-verified.iconset"
+          iconutil --convert iconset --output "$RUNNER_TEMP/openairx-verified.iconset" "$iconfile"
+          test -s "$RUNNER_TEMP/openairx-verified.iconset/icon_512x512@2x.png"
           /usr/libexec/PlistBuddy -c 'Print :CFBundleIconFile' "$mountpoint/OpenAirX.app/Contents/Info.plist" | grep -Fx OpenAirX.icns
           echo "DMG contains OpenAirX.app and /Applications shortcut"
 

@@ -1,8 +1,10 @@
 # OpenAirX 1.74 — AirPlay mirroring and audio receiver (based on UxPlay)
 
+![OpenAirX logo](assets/OpenAirX-logo.svg)
+
 > **OpenAirX standalone macOS installers:** precompiled .pkg and .dmg for
 > **Intel 10.15+** and **Apple Silicon 11+** are available in
-> [Releases](https://github.com/MDominicRQ/OpenAirX/releases).
+> [Releases](https://github.com/MDominicRQ/UxPlay/releases).
 > They include the GStreamer runtime, your OpenAirX logo, and do not need Homebrew on the Mac.
 > Original UxPlay development and license acknowledgements remain below.
 > **Not notarized**: macOS may require *Open Anyway* on first launch.
