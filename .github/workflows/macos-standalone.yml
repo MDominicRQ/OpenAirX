@@ -1,0 +1,157 @@
+name: Standalone macOS installers
+
+on:
+  push:
+    branches: [master, feature/macos-10.15-standalone]
+    tags: ['v*']
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    name: macOS ${{ matrix.arch }} (>= ${{ matrix.minimum }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15-intel
+            arch: x86_64
+            minimum: '10.15'
+            openssl_target: darwin64-x86_64-cc
+          - runner: macos-15
+            arch: arm64
+            minimum: '11.0'
+            openssl_target: darwin64-arm64-cc
+    env:
+      MACOSX_DEPLOYMENT_TARGET: ${{ matrix.minimum }}
+      GST_VERSION: '1.26.11'
+      OPENSSL_VERSION: '3.5.8'
+      LIBPLIST_VERSION: '2.6.0'
+      HOMEBREW_NO_ANALYTICS: '1'
+      HOMEBREW_NO_AUTO_UPDATE: '1'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build tools
+        run: brew install cmake pkg-config autoconf automake libtool
+
+      - name: Install official GStreamer universal runtime and SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://gstreamer.freedesktop.org/data/pkg/osx/$GST_VERSION"
+          curl --fail --location --retry 3 --output "$RUNNER_TEMP/gst-runtime.pkg" \
+            "$base/gstreamer-1.0-$GST_VERSION-universal.pkg"
+          curl --fail --location --retry 3 --output "$RUNNER_TEMP/gst-devel.pkg" \
+            "$base/gstreamer-1.0-devel-$GST_VERSION-universal.pkg"
+          sudo installer -pkg "$RUNNER_TEMP/gst-runtime.pkg" -target /
+          sudo installer -pkg "$RUNNER_TEMP/gst-devel.pkg" -target /
+          test -d /Library/Frameworks/GStreamer.framework
+          test -x /Library/Frameworks/GStreamer.framework/Commands/pkg-config
+
+      - name: Build OpenSSL as target-specific static library
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/deps" "$RUNNER_TEMP/src"
+          curl --fail --location --retry 3 \
+            "https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz" \
+            -o "$RUNNER_TEMP/src/openssl.tar.gz"
+          tar -xzf "$RUNNER_TEMP/src/openssl.tar.gz" -C "$RUNNER_TEMP/src"
+          cd "$RUNNER_TEMP/src/openssl-$OPENSSL_VERSION"
+          ./Configure "${{ matrix.openssl_target }}" \
+            --prefix="$RUNNER_TEMP/deps" --openssldir="$RUNNER_TEMP/deps/ssl" \
+            no-shared no-tests no-module
+          make -j3 build_sw
+          make install_sw
+          test -f "$RUNNER_TEMP/deps/lib/libcrypto.a"
+
+      - name: Build libplist as target-specific static library
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 \
+            "https://codeload.github.com/libimobiledevice/libplist/tar.gz/refs/tags/$LIBPLIST_VERSION" \
+            -o "$RUNNER_TEMP/src/libplist.tar.gz"
+          tar -xzf "$RUNNER_TEMP/src/libplist.tar.gz" -C "$RUNNER_TEMP/src"
+          cd "$RUNNER_TEMP/src/libplist-$LIBPLIST_VERSION"
+          ./autogen.sh --prefix="$RUNNER_TEMP/deps" --disable-shared \
+            --enable-static --without-cython --disable-tools --disable-tests
+          make -j3
+          make install
+          test -f "$RUNNER_TEMP/deps/lib/libplist-2.0.a"
+
+      - name: Compile UxPlay with old macOS deployment target
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PKG_CONFIG_PATH="$RUNNER_TEMP/deps/lib/pkgconfig:/Library/Frameworks/GStreamer.framework/Libraries/pkgconfig:/Library/Frameworks/GStreamer.framework/Versions/Current/lib/pkgconfig"
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_OSX_ARCHITECTURES="${{ matrix.arch }}" \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET="${{ matrix.minimum }}" \
+            -DCMAKE_PREFIX_PATH="$RUNNER_TEMP/deps" \
+            -DNO_MARCH_NATIVE=ON -DNO_X11_DEPS=ON \
+            -DUXPLAY_MACOS_STANDALONE=ON
+          cmake --build build --parallel 3
+          file build/uxplay
+
+      - name: Assemble DMG/PKG and audit binary dependencies
+        shell: bash
+        run: |
+          bash scripts/macos/package-app.sh build/uxplay \
+            "${{ matrix.arch }}" "${{ matrix.minimum }}"
+
+      - name: Smoke-test bundled CLI and GStreamer plugins
+        shell: bash
+        run: |
+          set -euo pipefail
+          app="$PWD/dist/UxPlay.app"
+          "$app/Contents/MacOS/UxPlay" -h > "$RUNNER_TEMP/uxplay-help.txt" 2>&1
+          grep -i 'UxPlay' "$RUNNER_TEMP/uxplay-help.txt"
+          runtime="$app/Contents/Frameworks/GStreamer.framework/Versions/Current"
+          export GST_PLUGIN_SYSTEM_PATH_1_0="$runtime/lib/gstreamer-1.0"
+          export GST_PLUGIN_SCANNER="$runtime/libexec/gstreamer-1.0/gst-plugin-scanner"
+          export GIO_EXTRA_MODULES="$runtime/lib/gio/modules"
+          export GST_PLUGIN_PATH_1_0=""
+          inspect="$runtime/bin/gst-inspect-1.0"
+          test -x "$inspect"
+          "$inspect" coreelements
+          "$inspect" appsrc
+          "$inspect" h264parse
+          "$inspect" osxvideosink
+          "$inspect" osxaudiosink
+
+      - name: Upload installable files
+        uses: actions/upload-artifact@v4
+        with:
+          name: uxplay-macos-${{ matrix.arch }}
+          path: |
+            dist/*.pkg
+            dist/*.dmg
+            dist/*.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+  release:
+    name: Publish successful tagged-build installers
+    needs: package
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: uxplay-macos-*
+          path: release
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/*.dmg
+            release/*.pkg
+            release/*.sha256
+          generate_release_notes: true
