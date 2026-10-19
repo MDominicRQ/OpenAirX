@@ -80,8 +80,10 @@ jobs:
             -o "$RUNNER_TEMP/src/libplist.tar.gz"
           tar -xzf "$RUNNER_TEMP/src/libplist.tar.gz" -C "$RUNNER_TEMP/src"
           cd "$RUNNER_TEMP/src/libplist-$LIBPLIST_VERSION"
+          # GitHub's automatically generated tag tarballs have no .git metadata.
+          printf '%s\n' "$LIBPLIST_VERSION" > .tarball-version
           ./autogen.sh --prefix="$RUNNER_TEMP/deps" --disable-shared \
-            --enable-static --without-cython --disable-tools --disable-tests
+            --enable-static --without-cython
           make -j3
           make install
           test -f "$RUNNER_TEMP/deps/lib/libplist-2.0.a"
