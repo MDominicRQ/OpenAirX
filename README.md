@@ -1,5 +1,13 @@
 # UxPlay 1.74 (Experimental): AirPlay-Mirror and AirPlay-Audio server for Linux, macOS, and Unix (also runs on Windows).
 
+> **Standalone macOS installers (this fork):** precompiled .pkg and .dmg for
+> **Intel 10.15+** and **Apple Silicon 11+** are available in
+> [Releases](https://github.com/MDominicRQ/UxPlay/releases).
+> They include the GStreamer runtime and do not need Homebrew on the Mac.
+> **Not notarized**: macOS may require *Open Anyway* on first launch.
+> [Install details and CI guarantees](docs/macos-standalone.md).
+
+
 ### **Now developed at the GitHub site <https://github.com/FDH2/UxPlay> (where ALL user issues should be posted, and latest versions can be found).**
 
 -   **NEW in v 1.74 (Experimental) (June 2026)

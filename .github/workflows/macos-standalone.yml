@@ -142,7 +142,7 @@ jobs:
   release:
     name: Publish successful tagged-build installers
     needs: package
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -156,4 +156,13 @@ jobs:
             release/*.dmg
             release/*.pkg
             release/*.sha256
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || format('v1.74.0-macos-ci.{0}', github.run_number) }}
+          name: ${{ github.ref == 'refs/heads/master' && format('UxPlay macOS 1.74.0 - CI build {0} (unsigned)', github.run_number) || github.ref_name }}
+          prerelease: ${{ github.ref == 'refs/heads/master' }}
+          fail_on_unmatched_files: true
+          body: |
+            Self-contained Intel (macOS 10.15+) and Apple Silicon (macOS 11+) installers.
+            No Homebrew, GStreamer, or developer tools are needed on the receiving Mac.
+            These builds are not Apple-notarized; Gatekeeper may require Open Anyway.
+            See docs/macos-standalone.md for installation and test limitations.
           generate_release_notes: true
