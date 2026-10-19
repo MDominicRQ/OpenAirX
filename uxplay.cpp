@@ -1020,7 +1020,7 @@ static std::string random_mac () {
 
 static void print_info (char *name) {
     printf("OpenAirX %s: An open-source AirPlay mirroring server.\n", VERSION);
-    printf("=========== OpenAirX: https://github.com/MDominicRQ/OpenAirX ==========\n\u0020\u0020\u0020\u0020Based on UxPlay: https://github.com/FDH2/UxPlay\n");
+    printf("=========== OpenAirX: https://github.com/MDominicRQ/OpenAirX ==========\n    Based on UxPlay: https://github.com/FDH2/UxPlay\n");
     printf("Usage: %s [-n name] [-s wxh] [-p [n]] [(other options)]\n", name);
     printf("Options:\n");
     printf("-n name   Specify network name of the AirPlay server (UTF-8/ascii)\n");
